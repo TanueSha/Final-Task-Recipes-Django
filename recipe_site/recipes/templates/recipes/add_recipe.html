@@ -1,0 +1,79 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Добавить новый рецепт</h1>
+
+<form method="post" enctype="multipart/form-data" class="recipe-form">
+    {% csrf_token %}
+
+    <!-- Основная информация -->
+    <div class="card mb-4">
+        <div class="card-header">Основная информация</div>
+        <div class="card-body">
+            {{ form.as_p }}
+        </div>
+    </div>
+
+    <!-- Ингредиенты -->
+    <div class="card mb-4">
+        <div class="card-header">Ингредиенты</div>
+        <div class="card-body">
+            {{ ingredients_formset.management_form }}
+            <div id="ingredients-container">
+                {% for form in ingredients_formset %}
+                <div class="ingredient-form mb-3 p-3 border rounded">
+                    {{ form.as_p }}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-ingredient" class="btn btn-outline-secondary">+ Добавить ингредиент</button>
+        </div>
+    </div>
+
+    <!-- Шаги приготовления -->
+    <div class="card mb-4">
+        <div class="card-header">Шаги приготовления</div>
+        <div class="card-body">
+            {{ steps_formset.management_form }}
+            <div id="steps-container">
+                {% for form in steps_formset %}
+                <div class="step-form mb-4 p-3 border rounded">
+                    {{ form.as_p }}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-step" class="btn btn-outline-secondary">+ Добавить шаг</button>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить рецепт</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавление шага
+    document.getElementById('add-step').addEventListener('click', function() {
+        const totalForms = document.getElementById('id_steps-TOTAL_FORMS');
+        const formNum = parseInt(totalForms.value);
+        const newForm = document.querySelector('.step-form').cloneNode(true);
+
+        newForm.innerHTML = newForm.innerHTML.replace(/__prefix__/g, formNum);
+        document.getElementById('steps-container').appendChild(newForm);
+        totalForms.value = formNum + 1;
+    });
+
+    // Добавление ингредиента
+    document.getElementById('add-ingredient').addEventListener('click', function() {
+        const totalForms = document.getElementById('id_ingredients-TOTAL_FORMS');
+        const formNum = parseInt(totalForms.value);
+        const newForm = document.querySelector('.ingredient-form').cloneNode(true);
+
+        newForm.innerHTML = newForm.innerHTML.replace(/__prefix__/g, formNum);
+        document.getElementById('ingredients-container').appendChild(newForm);
+        totalForms.value = formNum + 1;
+    });
+});
+</script>
+{% endblock %}

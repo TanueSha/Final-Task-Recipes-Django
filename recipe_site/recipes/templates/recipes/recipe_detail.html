@@ -1,0 +1,37 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+<div class="recipe-detail">
+    <h1>{{ recipe.title }}</h1>
+    <img src="{{ recipe.main_image.url }}" class="img-fluid rounded mb-4" alt="{{ recipe.title }}">
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Ингредиенты</h3>
+            <ul class="ingredients-list">
+                {% for ingredient in recipe.ingredients.all %}
+                <li>{{ ingredient.name }} - {{ ingredient.quantity }} {{ ingredient.measure }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Информация</h3>
+            <p>Время приготовления: {{ recipe.cooking_time }} мин.</p>
+            <p>Автор: {{ recipe.author.username }}</p>
+        </div>
+    </div>
+
+    <div class="steps-container mt-4">
+        <h2>Шаги приготовления</h2>
+        {% for step in steps %}
+        <div class="step-card mb-4 p-3 border rounded">
+            <div class="step-number h4">Шаг {{ step.order }}</div>
+            {% if step.image %}
+            <img src="{{ step.image.url }}" class="step-image img-fluid rounded mb-3" alt="Шаг {{ step.order }}">
+            {% endif %}
+            <p class="step-text">{{ step.instruction }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

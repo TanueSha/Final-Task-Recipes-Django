@@ -1,0 +1,16 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+<h2>Вход в систему</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Войти</button>
+    {% if form.errors %}
+<div class="alert alert-danger">
+    Неправильное имя пользователя или пароль
+</div>
+{% endif %}
+</form>
+<p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь</a></p>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "recipes/base.html" %}
+
+{% block content %}
+<h1>Рецепты в категории: {{ category.name }} ({{ category.cuisine }})</h1>
+
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col-md-4 mb-4">
+        <div class="card recipe-card">
+            <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text">{{ recipe.description|truncatewords:15 }}</p>
+                <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-primary">Смотреть рецепт</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>Пока нет рецептов в этой категории.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
